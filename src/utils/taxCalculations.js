@@ -117,7 +117,7 @@ export const calculateHRAExemption = (basicSalary, hra, rentPaid, isMetro) => {
 /**
  * Calculate income tax based on regime and slabs
  */
-export const calculateIncomeTax = (taxableIncome, isOldRegime = true, financialYear = '2025-26', age = 0) => {
+export const calculateIncomeTax = (taxableIncome, isOldRegime = true, financialYear = '2025-26') => {
   const slabs = getTaxSlabs(isOldRegime, financialYear);
   let tax = 0;
   
@@ -148,7 +148,6 @@ export const calculateCTCBreakdown = (ctc, options = {}) => {
     rentPaid = 0,
     isMetro = false,
     financialYear = '2025-26',
-    age = 0,
     customComponents = null,
     performanceBonus = 0,
     medicalAllowance = 0,
@@ -215,7 +214,7 @@ export const calculateCTCBreakdown = (ctc, options = {}) => {
   }
   
   // Income Tax (with rebate applied inside)
-  const incomeTax = calculateIncomeTax(Math.max(0, taxableIncome), isOldRegime, financialYear, age);
+  const incomeTax = calculateIncomeTax(Math.max(0, taxableIncome), isOldRegime, financialYear);
   
   // Cess (4% on income tax)
   const cess = Math.round(incomeTax * CESS_RATE);
@@ -232,8 +231,7 @@ export const calculateCTCBreakdown = (ctc, options = {}) => {
       ? grossSalary - annualPF - fyConfig.standardDeduction  // New regime (no HRA exemption)
       : grossSalary - annualPF - fyConfig.standardDeduction - annualHRAExemption), // Old regime
     !isOldRegime,
-    financialYear,
-    age
+    financialYear
   );
   const otherRegimeCess = Math.round(otherRegimeTax * CESS_RATE);
   const otherRegimeTotalTax = otherRegimeTax + otherRegimeCess;
