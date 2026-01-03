@@ -45,13 +45,13 @@ const SalaryChart = ({ results }) => {
   const COLORS = ['#10b981', '#3b82f6', '#ef4444', '#f59e0b'];
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+    <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">
         Salary Breakdown - CTC vs In-Hand
       </h2>
       
-      <div className="w-full" style={{ height: '320px' }}>
-        <ResponsiveContainer width="100%" height={320}>
+      <div className="w-full" style={{ height: '280px', minHeight: '280px' }}>
+        <ResponsiveContainer width="100%" height={280}>
           <PieChart>
             <Pie
               data={chartData}
@@ -74,7 +74,7 @@ const SalaryChart = ({ results }) => {
       </div>
 
       {/* Percentage Breakdown */}
-      <div className="mt-6 grid grid-cols-2 gap-4">
+      <div className="mt-4 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div className="text-center p-4 bg-green-50 rounded-lg">
           <p className="text-sm text-gray-600 mb-1">Take-Home %</p>
           <p className="text-2xl font-bold text-green-600">

@@ -13,32 +13,32 @@ const InputPanel = ({ register, values, setValue, onCalculate }) => {
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Input Details</h2>
+    <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Input Details</h2>
       
       {/* CTC Amount */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-          <span className="text-2xl mr-2">₹</span>
+          <span className="text-xl sm:text-2xl mr-2">₹</span>
           CTC Amount (Annual)
         </label>
         <input
           type="number"
           {...register('ctc')}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-3 sm:px-4 py-3 sm:py-2 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="Enter CTC"
         />
       </div>
 
       {/* Financial Year */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-          <span className="text-2xl mr-2">📅</span>
+          <span className="text-xl sm:text-2xl mr-2">📅</span>
           Financial Year
         </label>
         <select
           {...register('financialYear')}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-3 sm:px-4 py-3 sm:py-2 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           <option value="2026-27">FY 2026-27</option>
           <option value="2025-26">FY 2025-26</option>
@@ -47,12 +47,12 @@ const InputPanel = ({ register, values, setValue, onCalculate }) => {
       </div>
 
       {/* Tax Regime Toggle */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <label className="flex items-center text-sm font-medium text-gray-700 mb-3">
-          <span className="text-2xl mr-2">💰</span>
+          <span className="text-xl sm:text-2xl mr-2">💰</span>
           Tax Regime
         </label>
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
           <label className="flex items-center cursor-pointer">
             <input
               type="radio"
@@ -79,14 +79,14 @@ const InputPanel = ({ register, values, setValue, onCalculate }) => {
       </div>
 
       {/* State Selection */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-          <span className="text-2xl mr-2">📍</span>
+          <span className="text-xl sm:text-2xl mr-2">📍</span>
           State
         </label>
         <select
           {...register('state')}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-3 sm:px-4 py-3 sm:py-2 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           {states.map(state => (
             <option key={state} value={state}>{state}</option>
@@ -95,7 +95,7 @@ const InputPanel = ({ register, values, setValue, onCalculate }) => {
       </div>
 
       {/* Metro City Toggle */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <label className="flex items-center cursor-pointer">
           <input
             type="checkbox"
@@ -110,14 +110,14 @@ const InputPanel = ({ register, values, setValue, onCalculate }) => {
 
       {/* Rent Paid (Optional) */}
       {values.isOldRegime && (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <label className="text-sm font-medium text-gray-700 mb-2 block">
             Monthly Rent Paid (Optional)
           </label>
           <input
             type="number"
             {...register('rentPaid')}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 sm:px-4 py-3 sm:py-2 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Enter monthly rent"
           />
           <p className="text-xs text-gray-500 mt-1">For HRA exemption calculation</p>
@@ -127,7 +127,7 @@ const InputPanel = ({ register, values, setValue, onCalculate }) => {
       {/* Calculate Button */}
       <button
         onClick={onCalculate}
-        className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+        className="w-full bg-blue-600 text-white py-3 sm:py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-base sm:text-base touch-manipulation"
       >
         Calculate
       </button>
