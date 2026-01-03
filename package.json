@@ -1,8 +1,19 @@
 {
   "name": "ctc-tracker",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Calculate your in-hand salary from CTC with accurate Indian tax calculations",
+  "author": "CTC Tracker",
+  "license": "MIT",
+  "keywords": [
+    "ctc-calculator",
+    "salary-calculator",
+    "tax-calculator",
+    "indian-tax",
+    "in-hand-salary",
+    "take-home-salary"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -33,7 +33,7 @@ A modern, responsive web application to calculate your **in-hand salary from CTC
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ctc-tracker.git
+git clone https://github.com/ananikets18/ctc-tracker.git
 
 # Navigate to project directory
 cd ctc-tracker
@@ -161,28 +161,6 @@ npm run build
 
 # Preview production build locally
 npm run preview
-```
-
-The production build will be optimized and minified in the `dist/` folder.
-
-## 🌐 Deployment
-
-### Vercel (Recommended)
-```bash
-npm install -g vercel
-vercel
-```
-
-### Netlify
-```bash
-npm run build
-# Deploy dist/ folder
-```
-
-### GitHub Pages
-```bash
-npm run build
-# Deploy dist/ folder to gh-pages branch
 ```
 
 ## 📝 License
