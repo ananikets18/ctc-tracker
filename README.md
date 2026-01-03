@@ -145,5 +145,6 @@ ctc-tracker/
 ├── postcss.config.js        # PostCSS configuration
 └── eslint.config.js         # ESLint rules
 ```
+---
 
 **Built with ❤️ by [Aniket](https://github.com/ananikets18) using React + Vite + TailwindCSS**
