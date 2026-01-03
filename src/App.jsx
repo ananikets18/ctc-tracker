@@ -59,11 +59,6 @@ function App() {
     }
   }, [ctc, isOldRegime, state, rentPaid, isMetro, financialYear]);
 
-  // Auto-calculate on form change
-  useEffect(() => {
-    handleCalculate();
-  }, [handleCalculate]);
-
   // Close modal on escape key
   useEffect(() => {
     const handleEscape = (e) => {
