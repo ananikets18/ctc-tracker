@@ -167,38 +167,40 @@ export const calculateCTCBreakdown = (ctc, options = {}) => {
   if (customComponents) {
     ({ basic, hra, specialAllowance, otherAllowances } = customComponents);
   } else {
-    // Standard breakdown (40% basic, 20% HRA, rest distributed)
-    basic = Math.round(ctc * 0.4);
-    hra = Math.round(ctc * 0.2);
+    // Industry Standard breakdown (48% basic, 40% of basic as HRA)
+    basic = Math.round(ctc * 0.48);
+    hra = Math.round(basic * 0.40);
     
-    // Calculate remaining amount after basic, HRA, employer contributions
-    const employerPFContribution = Math.min(basic * PF_EMPLOYER_RATE, PF_CEILING_ANNUAL);
-    const gratuity = Math.round(ctc * GRATUITY_RATE);
+    // Employer Contributions (not part of gross salary but part of CTC)
+    const employerPFContribution = Math.round(basic * PF_EMPLOYER_RATE);
+    const gratuityContribution = Math.round(basic * GRATUITY_RATE);
     
-    const remaining = ctc - basic - hra - employerPFContribution - gratuity 
+    // Special Allowance = CTC - Basic - HRA - Employer Contributions - Other components
+    const remaining = ctc - basic - hra - employerPFContribution - gratuityContribution
                       - performanceBonus - medicalAllowance - conveyanceAllowance 
                       - daAllowance - ltaAllowance - employerNPS - healthInsurance;
     
-    specialAllowance = Math.max(0, Math.round(remaining * 0.8));
-    otherAllowances = Math.max(0, remaining - specialAllowance);
+    specialAllowance = Math.max(0, remaining);
+    otherAllowances = 0; // Consolidated into special allowance
   }
   
   const monthlyBasic = Math.round(basic / 12);
   const monthlyHRA = Math.round(hra / 12);
   
-  // PF Calculation (capped at monthly ceiling)
-  const monthlyPF = calculatePF(monthlyBasic);
-  const annualPF = Math.min(monthlyPF * 12, PF_CEILING_ANNUAL);
+  // PF Calculation (on full basic as per industry standard for CTC calculations)
+  // Note: Statutory limit is ₹15K/month but for CTC breakdown, calculated on full basic
+  const annualPF = Math.round(basic * PF_EMPLOYEE_RATE);
   
-  // Employer Contributions (not in gross salary)
-  const employerPF = Math.min(Math.round(basic * PF_EMPLOYER_RATE), PF_CEILING_ANNUAL);
-  const gratuity = Math.round(ctc * GRATUITY_RATE);
+  // Employer Contributions (not in gross salary but part of CTC)
+  const employerPF = Math.round(basic * PF_EMPLOYER_RATE);
+  const gratuity = Math.round(basic * GRATUITY_RATE);
   
   // Professional Tax (only if salary > 5L)
   const annualProfessionalTax = ctc > 500000 ? (PROFESSIONAL_TAX[state] || 0) : 0;
   
-  // Gross Salary (what you actually receive, excluding employer contributions)
-  const grossSalary = ctc - employerPF - gratuity - employerNPS - healthInsurance;
+  // Gross Salary (actual cash in hand = Basic + HRA + Special Allowance + Other cash components)
+  const grossSalary = basic + hra + specialAllowance + performanceBonus + medicalAllowance 
+                      + conveyanceAllowance + daAllowance + ltaAllowance;
   
   // HRA Exemption (monthly calculation)
   const monthlyRentPaid = rentPaid;

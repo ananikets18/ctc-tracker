@@ -10,11 +10,11 @@ function App() {
   
   const { register, watch, setValue, getValues } = useForm({
     defaultValues: {
-      ctc: 1200000,
+      ctc: '',
       isOldRegime: true,
       state: 'Maharashtra',
-      rentPaid: 0,
-      isMetro: true,
+      rentPaid: '',
+      isMetro: false,
       financialYear: '2025-26'
     }
   });
@@ -27,17 +27,20 @@ function App() {
 
   const handleCalculate = useCallback(() => {
     const formValues = getValues();
-    if (formValues.ctc > 0) {
+    if (formValues.ctc && formValues.ctc > 0) {
       const calculationResults = calculateCTCBreakdown(
         Number(formValues.ctc),
         {
           isOldRegime: formValues.isOldRegime,
           state: formValues.state,
-          rentPaid: Number(formValues.rentPaid),
-          isMetro: formValues.isMetro
+          rentPaid: Number(formValues.rentPaid) || 0,
+          isMetro: formValues.isMetro,
+          financialYear: formValues.financialYear
         }
       );
       setResults(calculationResults);
+    } else {
+      setResults(null);
     }
   }, [getValues, ctc, isOldRegime, state, rentPaid, isMetro]);
 
@@ -72,11 +75,25 @@ function App() {
 
           {/* Results Panel */}
           <div className="lg:col-span-2 space-y-6">
-            {results && (
+            {results ? (
               <>
                 <ResultsPanel results={results} />
                 <SalaryChart results={results} />
               </>
+            ) : (
+              <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+                <div className="text-gray-400 mb-4">
+                  <svg className="w-24 h-24 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                  Enter Your CTC to Get Started
+                </h3>
+                <p className="text-gray-500">
+                  Fill in your annual CTC and other details to see your salary breakdown
+                </p>
+              </div>
             )}
           </div>
         </div>
