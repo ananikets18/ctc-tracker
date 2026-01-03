@@ -37,6 +37,23 @@ export const TAX_SLABS_NEW_2025 = [
   { min: 1500000, max: Infinity, rate: 30 }
 ];
 
+// Tax Slabs for FY 2026-27 (same as 2025-26 until official announcement)
+export const TAX_SLABS_OLD_2026 = [
+  { min: 0, max: 250000, rate: 0 },
+  { min: 250000, max: 500000, rate: 5 },
+  { min: 500000, max: 1000000, rate: 20 },
+  { min: 1000000, max: Infinity, rate: 30 }
+];
+
+export const TAX_SLABS_NEW_2026 = [
+  { min: 0, max: 300000, rate: 0 },
+  { min: 300000, max: 700000, rate: 5 },
+  { min: 700000, max: 1000000, rate: 10 },
+  { min: 1000000, max: 1200000, rate: 15 },
+  { min: 1200000, max: 1500000, rate: 20 },
+  { min: 1500000, max: Infinity, rate: 30 }
+];
+
 // Professional Tax by State (Annual)
 export const PROFESSIONAL_TAX = {
   'Maharashtra': 2400,
@@ -64,6 +81,11 @@ export const FINANCIAL_YEAR_CONFIG = {
     standardDeduction: 75000,
     rebateLimit: 1200000, // Tax rebate if income < 12L
     maxRebateAmount: 60000
+  },
+  '2026-27': {
+    standardDeduction: 75000, // Assuming same as 2025-26
+    rebateLimit: 1200000,
+    maxRebateAmount: 60000
   }
 };
 
@@ -83,12 +105,21 @@ export const SUPER_SENIOR_CITIZEN_AGE = 80;
  * Get tax slabs based on regime and financial year
  */
 export const getTaxSlabs = (isOldRegime, financialYear = '2025-26') => {
-  const year = financialYear === '2024-25' ? '2024' : '2025';
+  const yearMap = {
+    '2024-25': '2024',
+    '2025-26': '2025',
+    '2026-27': '2026'
+  };
   
-  if (year === '2024') {
-    return isOldRegime ? TAX_SLABS_OLD_2024 : TAX_SLABS_NEW_2024;
-  }
-  return isOldRegime ? TAX_SLABS_OLD_2025 : TAX_SLABS_NEW_2025;
+  const year = yearMap[financialYear] || '2025';
+  
+  const slabsMap = {
+    '2024': { old: TAX_SLABS_OLD_2024, new: TAX_SLABS_NEW_2024 },
+    '2025': { old: TAX_SLABS_OLD_2025, new: TAX_SLABS_NEW_2025 },
+    '2026': { old: TAX_SLABS_OLD_2026, new: TAX_SLABS_NEW_2026 }
+  };
+  
+  return isOldRegime ? slabsMap[year].old : slabsMap[year].new;
 };
 
 /**
