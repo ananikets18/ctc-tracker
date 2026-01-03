@@ -8,8 +8,10 @@ import { calculateCTCBreakdown } from './utils/taxCalculations';
 function App() {
   const [results, setResults] = useState(null);
   const [showResultsModal, setShowResultsModal] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [error, setError] = useState(null);
   
-  const { register, watch, setValue, getValues } = useForm({
+  const { register, watch, setValue } = useForm({
     defaultValues: {
       ctc: '',
       isOldRegime: true,
@@ -37,7 +39,29 @@ function App() {
   };
 
   const handleCalculate = useCallback(() => {
-    if (ctc && ctc > 0) {
+    setError(null);
+    
+    // Validation
+    if (!ctc || ctc <= 0) {
+      setError('Please enter a valid CTC amount (greater than 0)');
+      setResults(null);
+      return;
+    }
+    
+    if (ctc < 100000) {
+      setError('CTC should be at least ₹1,00,000');
+      setResults(null);
+      return;
+    }
+    
+    if (ctc > 100000000) {
+      setError('CTC seems unreasonably high. Please check your input.');
+      setResults(null);
+      return;
+    }
+    
+    try {
+      setIsCalculating(true);
       const calculationResults = calculateCTCBreakdown(
         Number(ctc),
         {
@@ -53,9 +77,12 @@ function App() {
       if (window.innerWidth < 1024) {
         setShowResultsModal(true);
       }
-    } else {
+    } catch (err) {
+      setError('An error occurred during calculation. Please try again.');
       setResults(null);
-      setShowResultsModal(false);
+      console.error('Calculation error:', err);
+    } finally {
+      setIsCalculating(false);
     }
   }, [ctc, isOldRegime, state, rentPaid, isMetro, financialYear]);
 
@@ -83,7 +110,7 @@ function App() {
   }, [showResultsModal]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4 sm:py-8 px-3 sm:px-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8 px-2">
@@ -103,6 +130,8 @@ function App() {
               values={formValues}
               setValue={setValue}
               onCalculate={handleCalculate}
+              isCalculating={isCalculating}
+              error={error}
             />
           </div>
 
@@ -114,7 +143,7 @@ function App() {
                 <SalaryChart results={results} />
               </>
             ) : (
-              <div className="bg-white rounded-lg shadow-lg p-6 sm:p-12 text-center">
+              <div className="bg-white rounded-lg shadow-lg p-6 sm:p-12 text-center animate-fade-in">
                 <div className="text-gray-400 mb-4">
                   <svg className="w-16 h-16 sm:w-24 sm:h-24 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />

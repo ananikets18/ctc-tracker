@@ -18,8 +18,8 @@ const CustomTooltip = ({ active, payload, ctc }) => {
 };
 
 const SalaryChart = ({ results }) => {
-  // Prepare data for pie chart
-  const chartData = [
+  // Prepare data for pie chart - filter out zero or negligible values
+  const allChartData = [
     {
       name: 'In-Hand Salary',
       value: results.results.annualInHand,
@@ -42,10 +42,14 @@ const SalaryChart = ({ results }) => {
     }
   ];
 
-  const COLORS = ['#10b981', '#3b82f6', '#ef4444', '#f59e0b'];
+  // Filter out items with zero or very small values (< 0.1% of CTC)
+  const chartData = allChartData.filter(item => item.value > (results.ctc * 0.001));
+  
+  // Generate colors array matching filtered data
+  const COLORS = chartData.map(item => item.color);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+    <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 animate-fade-in-up">
       <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">
         Salary Breakdown - CTC vs In-Hand
       </h2>
@@ -58,7 +62,10 @@ const SalaryChart = ({ results }) => {
               cx="50%"
               cy="50%"
               labelLine={false}
-              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+              label={({ percent }) => {
+                // Only show label if segment is > 5%
+                return percent > 0.05 ? `${(percent * 100).toFixed(0)}%` : '';
+              }}
               outerRadius={100}
               fill="#8884d8"
               dataKey="value"
@@ -68,7 +75,10 @@ const SalaryChart = ({ results }) => {
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip ctc={results.ctc} />} />
-            <Legend />
+            <Legend 
+              wrapperStyle={{ fontSize: '12px' }}
+              iconSize={10}
+            />
           </PieChart>
         </ResponsiveContainer>
       </div>
