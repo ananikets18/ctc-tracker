@@ -55,8 +55,8 @@ const InputPanel = ({ register, values, setValue, onCalculate }) => {
           <label className="flex items-center cursor-pointer">
             <input
               type="radio"
-              {...register('isOldRegime')}
-              value={true}
+              name="taxRegime"
+              value="old"
               checked={values.isOldRegime === true}
               onChange={() => setValue('isOldRegime', true)}
               className="mr-2"
@@ -66,8 +66,8 @@ const InputPanel = ({ register, values, setValue, onCalculate }) => {
           <label className="flex items-center cursor-pointer">
             <input
               type="radio"
-              {...register('isOldRegime')}
-              value={false}
+              name="taxRegime"
+              value="new"
               checked={values.isOldRegime === false}
               onChange={() => setValue('isOldRegime', false)}
               className="mr-2"

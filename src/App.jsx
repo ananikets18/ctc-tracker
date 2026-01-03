@@ -24,25 +24,34 @@ function App() {
   const state = watch('state');
   const rentPaid = watch('rentPaid');
   const isMetro = watch('isMetro');
+  const financialYear = watch('financialYear');
+
+  const formValues = {
+    ctc,
+    isOldRegime,
+    state,
+    rentPaid,
+    isMetro,
+    financialYear
+  };
 
   const handleCalculate = useCallback(() => {
-    const formValues = getValues();
-    if (formValues.ctc && formValues.ctc > 0) {
+    if (ctc && ctc > 0) {
       const calculationResults = calculateCTCBreakdown(
-        Number(formValues.ctc),
+        Number(ctc),
         {
-          isOldRegime: formValues.isOldRegime,
-          state: formValues.state,
-          rentPaid: Number(formValues.rentPaid) || 0,
-          isMetro: formValues.isMetro,
-          financialYear: formValues.financialYear
+          isOldRegime: isOldRegime,
+          state: state,
+          rentPaid: Number(rentPaid) || 0,
+          isMetro: isMetro,
+          financialYear: financialYear
         }
       );
       setResults(calculationResults);
     } else {
       setResults(null);
     }
-  }, [getValues, ctc, isOldRegime, state, rentPaid, isMetro]);
+  }, [ctc, isOldRegime, state, rentPaid, isMetro, financialYear]);
 
   // Auto-calculate on form change
   useEffect(() => {
@@ -67,7 +76,7 @@ function App() {
           <div className="lg:col-span-1">
             <InputPanel 
               register={register}
-              values={getValues()}
+              values={formValues}
               setValue={setValue}
               onCalculate={handleCalculate}
             />
