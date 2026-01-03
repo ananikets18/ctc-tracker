@@ -2,9 +2,13 @@
 
 A modern, responsive web application to calculate your **in-hand salary from CTC** with accurate Indian tax calculations.
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-success?style=for-the-badge&logo=vercel)](https://ctc-tracker.vercel.app/)
+
 ![CTC Tracker](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)
 ![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-4.1-38B2AC?logo=tailwind-css)
+
+**🚀 [Try it live at ctc-tracker.vercel.app](https://ctc-tracker.vercel.app/)**
 
 ## ✨ Features
 
