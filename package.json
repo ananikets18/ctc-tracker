@@ -4,8 +4,16 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Calculate your in-hand salary from CTC with accurate Indian tax calculations",
-  "author": "CTC Tracker",
+  "author": "Aniket <ananikets18>",
   "license": "MIT",
+  "homepage": "https://ctc-tracker.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ananikets18/ctc-tracker"
+  },
+  "bugs": {
+    "url": "https://github.com/ananikets18/ctc-tracker/issues"
+  },
   "keywords": [
     "ctc-calculator",
     "salary-calculator",

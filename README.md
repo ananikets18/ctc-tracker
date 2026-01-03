@@ -3,12 +3,16 @@
 A modern, responsive web application to calculate your **in-hand salary from CTC** with accurate Indian tax calculations.
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-success?style=for-the-badge&logo=vercel)](https://ctc-tracker.vercel.app/)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/ananikets18/ctc-tracker)
 
-![CTC Tracker](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)
+![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)
 ![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-4.1-38B2AC?logo=tailwind-css)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
 **🚀 [Try it live at ctc-tracker.vercel.app](https://ctc-tracker.vercel.app/)**
+
+> Built by [Aniket](https://github.com/ananikets18) | [⭐ Star this repo](https://github.com/ananikets18/ctc-tracker) if you find it helpful!
 
 ## ✨ Features
 
@@ -175,10 +179,24 @@ MIT License - feel free to use this project for personal or commercial purposes.
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
 ## 📧 Contact
 
-For issues, questions, or suggestions, please open an issue on GitHub.
+**Aniket** - [@ananikets18](https://github.com/ananikets18)
+
+Project Link: [https://github.com/ananikets18/ctc-tracker](https://github.com/ananikets18/ctc-tracker)
+
+Live Demo: [https://ctc-tracker.vercel.app](https://ctc-tracker.vercel.app)
+
+## ⭐ Show your support
+
+Give a ⭐️ if this project helped you!
 
 ---
 
-**Built with ❤️ using React + Vite + TailwindCSS**
+**Built with ❤️ by [Aniket](https://github.com/ananikets18) using React + Vite + TailwindCSS**
