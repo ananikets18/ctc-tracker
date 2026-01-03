@@ -13,14 +13,14 @@ export const TAX_SLABS_OLD_2024 = [
 
 export const TAX_SLABS_NEW_2024 = [
   { min: 0, max: 300000, rate: 0 },
-  { min: 300000, max: 600000, rate: 5 },
-  { min: 600000, max: 900000, rate: 10 },
-  { min: 900000, max: 1200000, rate: 15 },
+  { min: 300000, max: 700000, rate: 5 },
+  { min: 700000, max: 1000000, rate: 10 },
+  { min: 1000000, max: 1200000, rate: 15 },
   { min: 1200000, max: 1500000, rate: 20 },
   { min: 1500000, max: Infinity, rate: 30 }
 ];
 
-// Tax Slabs for FY 2025-26
+// Tax Slabs for FY 2025-26 (Finance Act 2025 - REVISED)
 export const TAX_SLABS_OLD_2025 = [
   { min: 0, max: 250000, rate: 0 },
   { min: 250000, max: 500000, rate: 5 },
@@ -29,15 +29,16 @@ export const TAX_SLABS_OLD_2025 = [
 ];
 
 export const TAX_SLABS_NEW_2025 = [
-  { min: 0, max: 300000, rate: 0 },
-  { min: 300000, max: 700000, rate: 5 },
-  { min: 700000, max: 1000000, rate: 10 },
-  { min: 1000000, max: 1200000, rate: 15 },
-  { min: 1200000, max: 1500000, rate: 20 },
-  { min: 1500000, max: Infinity, rate: 30 }
+  { min: 0, max: 400000, rate: 0 },        // Increased from 3L to 4L
+  { min: 400000, max: 800000, rate: 5 },   // 4-8L bracket
+  { min: 800000, max: 1200000, rate: 10 }, // 8-12L bracket
+  { min: 1200000, max: 1600000, rate: 15 }, // 12-16L bracket
+  { min: 1600000, max: 2000000, rate: 20 }, // 16-20L bracket
+  { min: 2000000, max: 2400000, rate: 25 }, // NEW 20-24L bracket
+  { min: 2400000, max: Infinity, rate: 30 }
 ];
 
-// Tax Slabs for FY 2026-27 (same as 2025-26 until official announcement)
+// Tax Slabs for FY 2026-27 (same as 2025-26 until Budget 2026)
 export const TAX_SLABS_OLD_2026 = [
   { min: 0, max: 250000, rate: 0 },
   { min: 250000, max: 500000, rate: 5 },
@@ -46,12 +47,13 @@ export const TAX_SLABS_OLD_2026 = [
 ];
 
 export const TAX_SLABS_NEW_2026 = [
-  { min: 0, max: 300000, rate: 0 },
-  { min: 300000, max: 700000, rate: 5 },
-  { min: 700000, max: 1000000, rate: 10 },
-  { min: 1000000, max: 1200000, rate: 15 },
-  { min: 1200000, max: 1500000, rate: 20 },
-  { min: 1500000, max: Infinity, rate: 30 }
+  { min: 0, max: 400000, rate: 0 },
+  { min: 400000, max: 800000, rate: 5 },
+  { min: 800000, max: 1200000, rate: 10 },
+  { min: 1200000, max: 1600000, rate: 15 },
+  { min: 1600000, max: 2000000, rate: 20 },
+  { min: 2000000, max: 2400000, rate: 25 },
+  { min: 2400000, max: Infinity, rate: 30 }
 ];
 
 // Professional Tax by State (Annual)
@@ -70,21 +72,21 @@ export const PROFESSIONAL_TAX = {
   'Other': 0
 };
 
-// Financial Year Constants
+// Financial Year Constants (Official Income Tax Dept data)
 export const FINANCIAL_YEAR_CONFIG = {
   '2024-25': {
     standardDeduction: 50000,
-    rebateLimit: 700000, // Tax rebate if income < 7L
-    maxRebateAmount: 25000
+    rebateLimit: 700000, // Old: ₹5L, New: ₹7L
+    maxRebateAmount: 25000 // New regime max rebate
   },
   '2025-26': {
     standardDeduction: 75000,
-    rebateLimit: 1200000, // Tax rebate if income < 12L
-    maxRebateAmount: 60000
+    rebateLimit: 700000, // Rebate if income ≤ ₹7L (NOT ₹12L!)
+    maxRebateAmount: 60000 // Increased from ₹25K
   },
   '2026-27': {
-    standardDeduction: 75000, // Assuming same as 2025-26
-    rebateLimit: 1200000,
+    standardDeduction: 75000, // Same as 2025-26 until Budget 2026
+    rebateLimit: 700000,
     maxRebateAmount: 60000
   }
 };
