@@ -1,4 +1,3 @@
-import React from 'react';
 import Tooltip from './Tooltip';
 
 const InputPanel = ({ register, values, setValue, onCalculate, isCalculating, error }) => {
@@ -16,7 +15,7 @@ const InputPanel = ({ register, values, setValue, onCalculate, isCalculating, er
   return (
     <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
       <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Input Details</h2>
-      
+
       {/* CTC Amount */}
       <div className="mb-4 sm:mb-6">
         <label htmlFor="ctc-input" className="flex items-center text-sm font-medium text-gray-700 mb-2">

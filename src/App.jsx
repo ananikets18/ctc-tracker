@@ -10,7 +10,7 @@ function App() {
   const [showResultsModal, setShowResultsModal] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
   const [error, setError] = useState(null);
-  
+
   const { register, watch, setValue } = useForm({
     defaultValues: {
       ctc: '',
@@ -40,30 +40,38 @@ function App() {
 
   const handleCalculate = useCallback(() => {
     setError(null);
-    
+
+    // Sanitize input - check for NaN and Infinity
+    const ctcNumber = parseFloat(ctc);
+    if (isNaN(ctcNumber) || !isFinite(ctcNumber)) {
+      setError('Please enter a valid numeric CTC amount');
+      setResults(null);
+      return;
+    }
+
     // Validation
-    if (!ctc || ctc <= 0) {
+    if (ctcNumber <= 0) {
       setError('Please enter a valid CTC amount (greater than 0)');
       setResults(null);
       return;
     }
-    
-    if (ctc < 100000) {
+
+    if (ctcNumber < 100000) {
       setError('CTC should be at least ₹1,00,000');
       setResults(null);
       return;
     }
-    
-    if (ctc > 100000000) {
+
+    if (ctcNumber > 100000000) {
       setError('CTC seems unreasonably high. Please check your input.');
       setResults(null);
       return;
     }
-    
+
     try {
       setIsCalculating(true);
       const calculationResults = calculateCTCBreakdown(
-        Number(ctc),
+        ctcNumber,
         {
           isOldRegime: isOldRegime,
           state: state,
@@ -78,9 +86,15 @@ function App() {
         setShowResultsModal(true);
       }
     } catch (err) {
-      setError('An error occurred during calculation. Please try again.');
+      const errorMessage = err.message
+        ? `Calculation failed: ${err.message}`
+        : 'An error occurred during calculation. Please check your inputs and try again.';
+      setError(errorMessage);
       setResults(null);
-      console.error('Calculation error:', err);
+      // Only log errors in development
+      if (import.meta.env.DEV) {
+        console.error('Calculation error:', err);
+      }
     } finally {
       setIsCalculating(false);
     }
@@ -110,7 +124,7 @@ function App() {
   }, [showResultsModal]);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 py-4 sm:py-8 px-3 sm:px-4 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4 sm:py-8 px-3 sm:px-4 flex flex-col">
       <div className="max-w-7xl mx-auto w-full flex-1">
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8 px-2">
@@ -139,7 +153,7 @@ function App() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Input Panel */}
           <div className="lg:col-span-1">
-            <InputPanel 
+            <InputPanel
               register={register}
               values={formValues}
               setValue={setValue}
@@ -178,11 +192,11 @@ function App() {
         {showResultsModal && results && (
           <>
             {/* Backdrop */}
-            <div 
+            <div
               className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
               onClick={() => setShowResultsModal(false)}
             />
-            
+
             {/* Bottom Sheet */}
             <div className="fixed inset-x-0 bottom-0 top-0 z-50 lg:hidden flex flex-col bg-white animate-slide-up overflow-hidden">
               {/* Header */}
@@ -217,7 +231,7 @@ function App() {
           </>
         )}
       </div>
-      
+
       {/* Footer */}
       <footer className="max-w-7xl mx-auto w-full mt-8 pt-6 border-t border-gray-200/50">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4">

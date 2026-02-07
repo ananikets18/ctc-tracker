@@ -1,4 +1,3 @@
-import React from 'react';
 import numeral from 'numeral';
 import Tooltip from './Tooltip';
 
@@ -10,19 +9,18 @@ const ResultsPanel = ({ results }) => {
   return (
     <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 animate-fade-in-up">
       <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Salary Breakdown</h2>
-      
+
       {/* Regime Comparison Banner */}
       {results.comparison && results.comparison.difference !== 0 && (
-        <div className={`mb-4 p-3 rounded-lg border-2 ${
-          results.comparison.difference > 0 ? 'bg-green-50 border-green-200' : 'bg-blue-50 border-blue-200'
-        }`}>
+        <div className={`mb-4 p-3 rounded-lg border-2 ${results.comparison.difference > 0 ? 'bg-green-50 border-green-200' : 'bg-blue-50 border-blue-200'
+          }`}>
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <p className="text-sm font-semibold text-gray-700 mb-1">
                 {results.comparison.difference > 0 ? '✅ Best Choice' : '💡 Alternative Available'}
               </p>
               <p className="text-xs text-gray-600">
-                {results.comparison.difference > 0 
+                {results.comparison.difference > 0
                   ? `You save ₹${formatCurrency(Math.abs(results.comparison.difference))} with ${results.comparison.currentRegime} Regime`
                   : `${results.comparison.otherRegime} Regime saves ₹${formatCurrency(Math.abs(results.comparison.difference))} more`
                 }
@@ -39,19 +37,19 @@ const ResultsPanel = ({ results }) => {
       {/* In-Hand Salary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8 stagger-children">
         {/* Annual */}
-        <div className="bg-linear-to-br from-green-500 to-green-600 rounded-lg p-3 sm:p-4 text-white">
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-3 sm:p-4 text-white">
           <p className="text-xs sm:text-sm opacity-90 mb-1">Annual In-Hand</p>
           <p className="text-xl sm:text-2xl md:text-3xl font-bold">₹{formatCurrency(results.results.annualInHand)}</p>
         </div>
-        
+
         {/* Monthly */}
-        <div className="bg-linear-to-br from-blue-500 to-blue-600 rounded-lg p-3 sm:p-4 text-white">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-3 sm:p-4 text-white">
           <p className="text-xs sm:text-sm opacity-90 mb-1">Monthly In-Hand</p>
           <p className="text-xl sm:text-2xl md:text-3xl font-bold">₹{formatCurrency(results.results.monthlyInHand)}</p>
         </div>
-        
+
         {/* Daily */}
-        <div className="bg-linear-to-br from-purple-500 to-purple-600 rounded-lg p-3 sm:p-4 text-white sm:col-span-2 md:col-span-1">
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-3 sm:p-4 text-white sm:col-span-2 md:col-span-1">
           <p className="text-xs sm:text-sm opacity-90 mb-1">Daily In-Hand</p>
           <p className="text-xl sm:text-2xl md:text-3xl font-bold">₹{formatCurrency(results.results.dailyInHand)}</p>
         </div>

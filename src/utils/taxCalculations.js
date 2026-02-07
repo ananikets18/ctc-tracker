@@ -103,6 +103,13 @@ export const CESS_RATE = 0.04; // 4% Health and Education Cess
 export const SENIOR_CITIZEN_AGE = 60;
 export const SUPER_SENIOR_CITIZEN_AGE = 80;
 
+// Salary Component Percentages (Industry Standard)
+export const BASIC_SALARY_PERCENTAGE = 0.48; // 48% of CTC
+export const HRA_PERCENTAGE = 0.40; // 40% of Basic Salary
+export const METRO_HRA_EXEMPTION = 0.50; // 50% for metro cities
+export const NON_METRO_HRA_EXEMPTION = 0.40; // 40% for non-metro cities
+export const RENT_THRESHOLD_PERCENTAGE = 0.10; // 10% of basic for HRA calculation
+
 /**
  * Get tax slabs based on regime and financial year
  */
@@ -112,15 +119,15 @@ export const getTaxSlabs = (isOldRegime, financialYear = '2025-26') => {
     '2025-26': '2025',
     '2026-27': '2026'
   };
-  
+
   const year = yearMap[financialYear] || '2025';
-  
+
   const slabsMap = {
     '2024': { old: TAX_SLABS_OLD_2024, new: TAX_SLABS_NEW_2024 },
     '2025': { old: TAX_SLABS_OLD_2025, new: TAX_SLABS_NEW_2025 },
     '2026': { old: TAX_SLABS_OLD_2026, new: TAX_SLABS_NEW_2026 }
   };
-  
+
   return isOldRegime ? slabsMap[year].old : slabsMap[year].new;
 };
 
@@ -137,13 +144,13 @@ export const calculatePF = (monthlyBasic) => {
  */
 export const calculateHRAExemption = (basicSalary, hra, rentPaid, isMetro) => {
   if (rentPaid === 0) return 0;
-  
-  const metroPercentage = isMetro ? 0.5 : 0.4;
-  
+
+  const metroPercentage = isMetro ? METRO_HRA_EXEMPTION : NON_METRO_HRA_EXEMPTION;
+
   const condition1 = hra;
   const condition2 = basicSalary * metroPercentage;
-  const condition3 = rentPaid - (basicSalary * 0.1);
-  
+  const condition3 = rentPaid - (basicSalary * RENT_THRESHOLD_PERCENTAGE);
+
   return Math.max(0, Math.min(condition1, condition2, condition3));
 };
 
@@ -153,7 +160,7 @@ export const calculateHRAExemption = (basicSalary, hra, rentPaid, isMetro) => {
 export const calculateIncomeTax = (taxableIncome, isOldRegime = true, financialYear = '2025-26') => {
   const slabs = getTaxSlabs(isOldRegime, financialYear);
   let tax = 0;
-  
+
   // Calculate base tax
   for (const slab of slabs) {
     if (taxableIncome > slab.min) {
@@ -161,13 +168,13 @@ export const calculateIncomeTax = (taxableIncome, isOldRegime = true, financialY
       tax += (taxableAmount * slab.rate) / 100;
     }
   }
-  
+
   // Apply rebate under Section 87A (if applicable)
   const fyConfig = FINANCIAL_YEAR_CONFIG[financialYear];
   if (taxableIncome <= fyConfig.rebateLimit) {
     tax = Math.max(0, tax - Math.min(tax, fyConfig.maxRebateAmount));
   }
-  
+
   return Math.round(tax);
 };
 
@@ -190,79 +197,81 @@ export const calculateCTCBreakdown = (ctc, options = {}) => {
     employerNPS = 0,
     healthInsurance = 0
   } = options;
-  
+
   // Get FY-specific configurations
   const fyConfig = FINANCIAL_YEAR_CONFIG[financialYear];
-  
+
   // Default salary components (if not provided)
   let basic, hra, specialAllowance, otherAllowances;
-  
+
   if (customComponents) {
     ({ basic, hra, specialAllowance, otherAllowances } = customComponents);
   } else {
-    // Industry Standard breakdown (48% basic, 40% of basic as HRA)
-    basic = Math.round(ctc * 0.48);
-    hra = Math.round(basic * 0.40);
-    
+    // Industry Standard breakdown
+    basic = Math.round(ctc * BASIC_SALARY_PERCENTAGE);
+    hra = Math.round(basic * HRA_PERCENTAGE);
+
     // Employer Contributions (not part of gross salary but part of CTC)
     const employerPFContribution = Math.round(basic * PF_EMPLOYER_RATE);
     const gratuityContribution = Math.round(basic * GRATUITY_RATE);
-    
+
     // Special Allowance = CTC - Basic - HRA - Employer Contributions - Other components
     const remaining = ctc - basic - hra - employerPFContribution - gratuityContribution
-                      - performanceBonus - medicalAllowance - conveyanceAllowance 
-                      - daAllowance - ltaAllowance - employerNPS - healthInsurance;
-    
+      - performanceBonus - medicalAllowance - conveyanceAllowance
+      - daAllowance - ltaAllowance - employerNPS - healthInsurance;
+
     specialAllowance = Math.max(0, remaining);
     otherAllowances = 0; // Consolidated into special allowance
   }
-  
+
   const monthlyBasic = Math.round(basic / 12);
   const monthlyHRA = Math.round(hra / 12);
-  
-  // PF Calculation (on full basic as per industry standard for CTC calculations)
-  // Note: Statutory limit is ₹15K/month but for CTC breakdown, calculated on full basic
-  const annualPF = Math.round(basic * PF_EMPLOYEE_RATE);
-  
+
+  // PF Calculation with statutory ceiling (₹15,000/month as per EPF Act 1952)
+  // Employee and Employer PF contributions are capped at 12% of ₹15,000/month
+  const monthlyBasicForPF = Math.min(monthlyBasic, PF_CEILING_MONTHLY);
+  const annualPF = Math.round(monthlyBasicForPF * PF_EMPLOYEE_RATE * 12);
+
   // Employer Contributions (not in gross salary but part of CTC)
-  const employerPF = Math.round(basic * PF_EMPLOYER_RATE);
+  // Employer PF also capped at ₹15,000/month basic
+  const employerPF = Math.round(monthlyBasicForPF * PF_EMPLOYER_RATE * 12);
   const gratuity = Math.round(basic * GRATUITY_RATE);
-  
+
   // Professional Tax (only if salary > 5L)
   const annualProfessionalTax = ctc > 500000 ? (PROFESSIONAL_TAX[state] || 0) : 0;
-  
+
   // Gross Salary (actual cash in hand = Basic + HRA + Special Allowance + Other cash components)
-  const grossSalary = basic + hra + specialAllowance + performanceBonus + medicalAllowance 
-                      + conveyanceAllowance + daAllowance + ltaAllowance;
-  
+  const grossSalary = basic + hra + specialAllowance + performanceBonus + medicalAllowance
+    + conveyanceAllowance + daAllowance + ltaAllowance;
+
   // HRA Exemption (monthly calculation)
   const monthlyRentPaid = rentPaid;
   const hraExemption = calculateHRAExemption(monthlyBasic, monthlyHRA, monthlyRentPaid, isMetro);
   const annualHRAExemption = hraExemption * 12;
-  
+
   // Taxable Income Calculation
   let taxableIncome = grossSalary - annualPF - fyConfig.standardDeduction;
-  
+
   // Old Regime: Allow HRA exemption and other deductions
   if (isOldRegime) {
     taxableIncome -= annualHRAExemption;
   }
-  
+
   // Income Tax (with rebate applied inside)
   const incomeTax = calculateIncomeTax(Math.max(0, taxableIncome), isOldRegime, financialYear);
-  
+
   // Cess (4% on income tax)
   const cess = Math.round(incomeTax * CESS_RATE);
   const totalTax = incomeTax + cess;
-  
+
   // In-Hand Salary Calculation
   const annualInHand = grossSalary - annualPF - annualProfessionalTax - totalTax;
   const monthlyInHand = Math.round(annualInHand / 12);
   const dailyInHand = Math.round(annualInHand / 365);
-  
+
   // Calculate comparison with other regime
   const otherRegimeTax = calculateIncomeTax(
-    Math.max(0, isOldRegime 
+    Math.max(0, isOldRegime
       ? grossSalary - annualPF - fyConfig.standardDeduction  // New regime (no HRA exemption)
       : grossSalary - annualPF - fyConfig.standardDeduction - annualHRAExemption), // Old regime
     !isOldRegime,
@@ -271,7 +280,7 @@ export const calculateCTCBreakdown = (ctc, options = {}) => {
   const otherRegimeCess = Math.round(otherRegimeTax * CESS_RATE);
   const otherRegimeTotalTax = otherRegimeTax + otherRegimeCess;
   const otherRegimeInHand = grossSalary - annualPF - annualProfessionalTax - otherRegimeTotalTax;
-  
+
   return {
     ctc,
     financialYear,

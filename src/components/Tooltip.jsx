@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const Tooltip = ({ children, content, position = 'top' }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -25,10 +25,13 @@ const Tooltip = ({ children, content, position = 'top' }) => {
         onFocus={() => setIsVisible(true)}
         onBlur={() => setIsVisible(false)}
         className="cursor-help"
+        tabIndex={0}
+        role="button"
+        aria-label="Show help tooltip"
       >
         {children}
       </div>
-      
+
       {isVisible && (
         <div
           className={`absolute z-50 ${positionClasses[position]} animate-fade-in`}

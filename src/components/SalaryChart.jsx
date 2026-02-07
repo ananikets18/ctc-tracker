@@ -1,4 +1,3 @@
-import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import numeral from 'numeral';
 
@@ -44,7 +43,7 @@ const SalaryChart = ({ results }) => {
 
   // Filter out items with zero or very small values (< 0.1% of CTC)
   const chartData = allChartData.filter(item => item.value > (results.ctc * 0.001));
-  
+
   // Generate colors array matching filtered data
   const COLORS = chartData.map(item => item.color);
 
@@ -53,7 +52,7 @@ const SalaryChart = ({ results }) => {
       <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">
         Salary Breakdown - CTC vs In-Hand
       </h2>
-      
+
       <div className="w-full" style={{ height: '280px', minHeight: '280px' }}>
         <ResponsiveContainer width="100%" height={280}>
           <PieChart>
@@ -75,7 +74,7 @@ const SalaryChart = ({ results }) => {
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip ctc={results.ctc} />} />
-            <Legend 
+            <Legend
               wrapperStyle={{ fontSize: '12px' }}
               iconSize={10}
             />

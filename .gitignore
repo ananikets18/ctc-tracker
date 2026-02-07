@@ -27,3 +27,6 @@ dist-ssr
 test-*.js
 *.test.js
 *.spec.js
+
+
+.env.production
