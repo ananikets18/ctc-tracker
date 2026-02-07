@@ -75,7 +75,7 @@ function App() {
         {
           isOldRegime: isOldRegime,
           state: state,
-          rentPaid: Number(rentPaid) || 0,
+          rentPaidMonthly: Number(rentPaid) || 0,
           isMetro: isMetro,
           financialYear: financialYear
         }
